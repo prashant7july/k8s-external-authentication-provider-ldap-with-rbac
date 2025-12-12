@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+  auth-services:
+    container_name: auth-services
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: auth-services:1.0
+    ports:
+      - 7443:3000
+    networks:
+      - ldapnet
+
+  # https://github.com/phpmx/phpmxbot
+  ngrok:
+    image: ngrok/ngrok
+    environment:
+      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
+    command: http auth-services:3000
+    networks:
+      - ldapnet
+    # depends_on:
+    #   - web
+    ports:
+      - "4040:4040"  # Add this line to enable local access to the ngrok dashboard
+
+networks:
+  ldapnet:
+    external: true
+    name: ldapnet

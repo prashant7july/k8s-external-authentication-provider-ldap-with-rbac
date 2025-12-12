@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Config
+clusters:
+  - name: webhook-authn
+    cluster:
+      insecure-skip-tls-verify: true
+      server: https://0175-223-190-86-215.ngrok-free.app/auth
+users:
+  - name: webhook-user
+contexts:
+  - name: webhook-context
+    context:
+      cluster: webhook-authn
+      user: webhook-user
+current-context: webhook-context

@@ -1,0 +1,10 @@
+dn: ou=dev,dc=example,dc=org
+objectClass: organizationalUnit
+ou: dev
+
+dn: cn=alice,ou=dev,dc=example,dc=org
+objectClass: inetOrgPerson
+cn: alice
+sn: Wonderland
+givenName: Alice
+userPassword: alicepassword

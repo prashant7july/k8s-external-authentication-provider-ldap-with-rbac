@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Config
+clusters:
+  - name: webhook-authn
+    cluster:
+      insecure-skip-tls-verify: true
+      server: http://host.docker.internal:7443/auth
+users:
+  - name: webhook-user
+contexts:
+  - name: webhook-context
+    context:
+      cluster: webhook-authn
+      user: webhook-user
+current-context: webhook-context

@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  openldap:
+    image: bitnami/openldap:2.6.10
+    container_name: openldap
+    ports:
+      - "1389:1389"  # OpenLDAP LDAP port
+    environment:
+      - LDAP_ROOT=dc=example,dc=org
+      - LDAP_ADMIN_USERNAME=admin
+      - LDAP_ADMIN_PASSWORD=adminpassword
+    # This not work
+    #volumes:
+    #  - ./bootstrap.ldif:/docker-entrypoint-initdb.d/50-bootstrap.ldif
+    networks:
+      - ldapnet
+
+  # phpldapadmin:
+  #   image: osixia/phpldapadmin:0.9.0
+  #   container_name: phpldapadmin
+  #   ports:
+  #     - "8081:443"
+  #   environment:
+  #     - PHPLDAPADMIN_LDAP_HOSTS=openldap
+  #   depends_on:
+  #     - openldap
+  #   networks:
+  #     - ldapnet
+
+networks:
+  ldapnet:
+    external: true
+    name: ldapnet

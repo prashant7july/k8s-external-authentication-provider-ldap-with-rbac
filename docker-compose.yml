@@ -1,0 +1,42 @@
+version: "3"
+
+services:
+
+  openldap:
+    image: bitnami/openldap:2.6.10
+    container_name: openldap
+    ports:
+      - "1389:1389"  # OpenLDAP LDAP port
+    environment:
+      - LDAP_ROOT=dc=example,dc=org
+      - LDAP_ADMIN_USERNAME=admin
+      - LDAP_ADMIN_PASSWORD=adminpassword
+    networks:
+      - ldapnet
+
+  auth-services:
+    container_name: auth-services
+    build:
+      context: ./auth-services
+      dockerfile: ./Dockerfile
+    image: auth-services:1.0
+    ports:
+      - 7443:3000
+    networks:
+      - ldapnet
+
+  # https://github.com/phpmx/phpmxbot
+  ngrok:
+    image: ngrok/ngrok
+    container_name: ngrok
+    environment:
+      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
+    command: http auth-services:3000
+    networks:
+      - ldapnet
+    ports:
+      - "4040:4040"  # Add this line to enable local access to the ngrok dashboard
+
+networks:
+  ldapnet:
+    name: ldapnet
